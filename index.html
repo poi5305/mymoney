@@ -1,0 +1,378 @@
+<!doctype html>
+<html manifest="cache.manifest">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="format-detection" content="telephone=no" />
+<title>MyMoney</title>
+
+<link type="text/css" rel="stylesheet" media="screen" href="css/jqtouch.css">
+<link type="text/css" rel="stylesheet" media="screen" href="css/themes/jqt/theme.css">
+
+
+<script src="js/jquery.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/jqtouch.js" type="application/x-javascript" charset="utf-8"></script>
+<!--
+<script src="js/extensions/jqt.offline.js" type="application/x-javascript" charset="utf-8"></script>
+!-->
+<script src="js/m.db.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/m.member.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="js/m.cal.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/m.record.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/m.ctrl.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/m.ep.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/c.index.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	var touchDuring = 0;
+	var jQT = $.jQTouch({
+		icon: 'kilo.png',
+		statusBar: 'black',
+		startupScreen: 'jqt_startup.png',
+		addGlossToIcon: false,
+        fullScreen: true,
+		preloadImages: [
+                    'css/themes/jqt/img/activeButton.png',
+                    'css/themes/jqt/img/back_button.png',
+                    'css/themes/jqt/img/back_button_clicked.png',
+                    'css/themes/jqt/img/blueButton.png',
+                    'css/themes/jqt/img/button.png',
+                    'css/themes/jqt/img/button_clicked.png',
+                    'css/themes/jqt/img/grayButton.png',
+                    'css/themes/jqt/img/greenButton.png',
+                    'css/themes/jqt/img/redButton.png',
+                    'css/themes/jqt/img/whiteButton.png',
+                    'css/themes/jqt/img/loading.gif'
+                    ]
+	});
+	function docTouchMoveSpecial(e){
+			e.preventDefault();
+			if(e.touches.length ==1){
+				if(e.touches[0].target.className == "calDay"){
+					
+					if(e.touches[0].pageX - cal.touchEventX >20){//前一個月
+						cal.setCalTable(cal.calDate.getFullYear(),cal.calDate.getMonth());
+					}else if (e.touches[0].pageX - cal.touchEventX < -20){
+						cal.setCalTable(cal.calDate.getFullYear(),cal.calDate.getMonth()+2);
+					}
+					if(e.touches[0].pageY - cal.touchEventY >20){
+						cal.setCalTable(cal.calDate.getFullYear()-1,cal.calDate.getMonth()+1);
+					}else if(e.touches[0].pageY - cal.touchEventY < -20){
+						cal.setCalTable(cal.calDate.getFullYear()+1,cal.calDate.getMonth()+1);
+					}
+					$("#calDayDetail").hide();
+				}
+			}
+	}
+	$(function(){
+		console.log('Document.ready test');
+		document.ontouchmove = function(e){
+			switch (location.hash){
+				case "#home":
+					docTouchMoveSpecial(e);
+					break;
+				case "#editor":
+					e.preventDefault();
+					break;
+				case "#welcome":
+					e.preventDefault();
+					break;
+				default:
+			}
+		};
+		//取得貨幣匯率
+//$.getJSON("http://www.amourlin.com/mymoney/currency.php?code=zaxscdvf&jsoncallback=?",function(json) {});
+		document.ontouchstart = function(e){
+			touchDuring = new Date().getTime();
+			
+			if(e.touches[0].target.className == "calDay"){
+				if(e.touches.length ==1){
+					cal.touchEventX = e.touches[0].pageX;
+					cal.touchEventY = e.touches[0].pageY;
+				}
+			}
+		}
+		document.ontouchend = function(e){
+			touchDuring = new Date().getTime()-touchDuring;
+		}
+		
+		idx.checkActiveUser();
+		
+		$(".switchButton").bind( "touchstart", function(){
+			$(this).css("-webkit-border-image","url(css/themes/jqt/img/button_clicked.png) 0 5 0 5");
+		}).bind( "touchend", function(){
+			$(this).css("-webkit-border-image","url(css/themes/jqt/img/button.png) 0 5 0 5");
+		});
+	});
+</script>
+<link rel="stylesheet" type="text/css" href="css/iphone.css" media="screen" />
+</head>
+
+<body>
+	<div id="home">
+    	<div class="toolbar">
+        	<a id="newRecord" href="#editor" class="switchButton slideup">+</a>
+            <!--<span id="lastMonth" class="switchButton">Last</span>-->
+            <span style="font-size:20px;position:relative;top:-5px; margin-left:20px;">
+                <span id="showYear">2011</span>
+                <span>/</span>
+                <span id="showMonth">11</span>
+                <span>月</span>
+            </span>
+             <!--<span id="nextMonth" class="switchButton">Next</span>-->
+            <a href="#ctrl" class="switchButton" style="float:right;">設定</a>
+            <a href="#export" class="switchButton" style="float:right;">報表</a>
+            
+            <span id="tmp"></span>
+            
+        </div>
+        <div id="calTable">
+        	
+        </div>
+        <div id="calDayDetail">
+        </div>
+    </div>
+    
+    <div id="ctrl">
+    	<div class="toolbar">
+        	<a href="#" class="back">Back</a>
+        	<h1>設定</h1>
+        </div>
+        <ul class="rounded">
+        	<li class="arrow"><a id="newTransfer" href="#editor">新增轉帳</a></li>
+        	<li class="arrow"><a href="#ctrl_account">帳號設定</a></li>
+            <li class="arrow"><a href="#ctrl_currency">貨幣設定</a></li>
+        </ul>
+    </div>
+    <!--
+    <div id="ctrl_transfer">
+    	<div class="toolbar">
+        	<a href="#" class="back">Back</a>
+        	<h1>新增轉帳</h1>
+        </div>
+        <ul class="rounded">
+        	<li>
+            	<label>金額</label>
+            	<input type="number" id="tfMoney" style="width:65px;margin-left:0px; text-align:center; color:#FFF;" placeholder="0"/>
+                <select id="tfCurrency" style="width:60px; margin-left:0px; color:#FFF;"></select>
+            </li>
+            <li>
+            	從<select id="tfAFrom" style="width:115px;margin-left:0px; text-align:center;color:#FFF;"></select>
+                到<select id="tfATo" style="width:115px;margin-left:0px; text-align:center;color:#FFF;"></select>
+            </li>
+        	<li>
+                <select id="tfMonth" style="width:56px; margin-left:0px;color:#FFF;"></select>
+                <select id="tfDay" style="width:56px; margin-left:0px;color:#FFF;"></select>
+                <select id="tfHour" style="width:56px; margin-left:0px;color:#FFF;"></select>
+                <select id="tfMinute"  style="width:56px; margin-left:0px;color:#FFF;"></select>
+            </li>
+        </ul>
+    </div>
+    !-->
+    <div id="ctrl_account">
+    	<div class="toolbar">
+        	<a href="#" class="back">Back</a>
+        	<h1>帳號</h1>
+            <a id="ctrl_account_new" class="button" href="#ctrl_account_editor">新增帳戶</a>
+        </div>
+        <ul id="ctrl_account_list" class="edgetoedge"></ul>
+    </div>
+    <div id="ctrl_account_editor">
+    	<div class="toolbar">
+        	<a href="#" class="back">Back</a>
+        	<h1>帳號</h1>
+            <a id="deleteAccount" href="#" class="switchButton slidedown" style="float:right; display:none;">Delete</a>
+            <a id="saveAccount" href="#" class="switchButton slidedown" style="float:right">Save</a>
+        </div>
+        <ul class="rounded">
+        	<li><input type="text" id="accountName" placeholder="帳戶名稱" /></li>
+            <li><input type="number" id="accountMoney" placeholder="金額" /></li>
+            <li>是否為主要帳戶？<span class="toggle"><input id="accountActivity" type="checkbox" checked="checked" /></span></li>
+            <li><input type="radio" class="accountType" name="accountType" value="0" title="一般" style="margin-right:50px;"  />
+            <input type="radio" class="accountType" name="accountType" value="1" title="信用" style="margin-right:50px;"/>
+            <input type="radio" class="accountType" name="accountType" value="2" title="代幣" /></li>
+           	<li><label>支付帳戶</label><select id="accountPid" style="width:200px; padding-left:20px"></select></li>
+            <li><label>上限金額</label><input type="number" style="width:150px; padding-left:20px" id="accountSpMoney" placeholder="金額" /></li>
+            <li><label>結帳日期 每月</label><select id="accountDay" style="width:65px; padding-left:20px"></select><label>號</label></li>
+        </ul>
+    </div>
+    
+    <div id="ctrl_currency">
+    	<div class="toolbar">
+        	<a href="#" class="back">Back</a>
+        	<h1>貨幣</h1>
+            <a id="ctrl_currency_new" class="switchButton" style="float:right" href="#ctrl_currency_new_page">新增</a>
+            <a id="ctrl_currency_update" class="switchButton" style="float:right" href="#">更新</a>
+        </div>
+        <ul class="rounded">
+        	<li><label>主要貨幣</label><select id="currencyMain" style="width:200px; padding-left:20px"></select></li>
+        </ul>
+        <ul id="ctrl_currency_list" class="edgetoedge">
+        	<li class="arrow"><a href="#ctrl_currency_new">新增貨幣</a></li>
+        </ul>
+    </div>
+    <div id="ctrl_currency_new_page">
+    	<div class="toolbar">
+        	<a href="#" class="back">Back</a>
+        	<h1>新增貨幣</h1>
+        </div>
+        <ul id="ctrl_currency_newList" class="edgetoedge">
+        	<li>是否為主要帳戶？<span class="toggle"><input id="accountActivity" type="checkbox" checked="checked" /></span></li>
+        </ul>
+    </div>
+    
+    <div id="editor">
+    	<div class="toolbar">
+        	<h1></h1>
+        	<a id="recordBackHome" href="#home" class="switchButton slidedown">Back</a>
+            
+            <a id="saveRecord" href="#" class="switchButton slidedown" style="float:right">Save</a>
+            <a id="deleteRecord" href="#" class="switchButton slidedown" style="float:right; display:none;">Delete</a>
+            
+        </div>
+        <ul class="rounded" style=" overflow:hidden;">
+        	<li>
+            	<label class="unTF" id="moneyPN" style="color:#F36">支</label>
+                <label class="TF">金額</label>
+                <input type="number" id="recordMoney" style="width:65px;margin-left:0px; text-align:center; color:#FFF;" placeholder="0"/>
+                <select id="recordCurrency" style="width:60px; margin-left:0px; color:#FFF;"></select>
+                <select class="unTF" id="recordAccount" style="width:115px;margin-left:0px; text-align:center;color:#FFF;"></select>
+            </li>
+            <li class="TF">
+            	<label>從</label><select id="recordTFFrom" style="width:105px;margin-left:10px; text-align:center;color:#FFF;"></select>
+                <label>到</label><select id="recordTFTo" style="width:105px;margin-left:10px; text-align:center;color:#FFF;"></select>
+            </li>
+                
+            
+            <li class="unTF">
+            	<label>分類</label>
+                <div id="recordSelItem" style="width:90px;margin-left:5px;white-space:nowrap; text-overflow:ellipsis; -o-text-overflow:ellipsis; overflow: hidden;color:#FFF;">目錄</div>
+                <input type="text" id="newItem" placeholder="新增分類" style="width:80px;margin-left:5px;color:#FFF;" />
+                <div id="newItemButton" class="switchButton" style="font-size:20px;"> + </div>
+            </li>
+            <li class="itemQSel unTF">
+            	<div id="orderByUseTimes" class="recordQSelItem sortEvent"><a href="#">使用最多</a></div>
+                <div id="orderByPassTimes" class="recordQSelItem sortEvent"><a href="#">最大分類</a></div>
+                <div id="orderBySort" class="recordQSelItem sortEvent"><a href="#">自定排序</a></div>
+            </li>
+            <li id="itemQSelLine_0" class="itemQSel unTF">
+            	
+            </li>
+            <li id="itemQSelLine_1" class="itemQSel unTF">
+            </li>
+            <li id="itemQSelLine_2" class="itemQSel unTF">
+            	
+            </li>
+            <li>
+            	<label>註記</label>
+                <input type="text" id="recordNote" style="width:200px;margin-left:20px; color:#FFF;" placeholder="點我輸入"/>
+            </li>
+            <li style="display:none">
+                <label>日期</label>
+                <label>時間</label>
+                <select id="recordYear" style="width:85px; margin-left:5px;color:#FFF;"></select>
+            </li>
+            
+            <li>
+                
+                <select id="recordMonth" style="width:56px; margin-left:0px;color:#FFF;"></select>
+                <select id="recordDay" style="width:56px; margin-left:0px;color:#FFF;"></select>
+                <select id="recordHour" style="width:56px; margin-left:0px;color:#FFF;"></select>
+                <select id="recordMinute"  style="width:56px; margin-left:0px;color:#FFF;"></select>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div id="editItem">
+    	<div class="toolbar">
+            <h1>編輯分類</h1>
+            <a id="backItemSel" href="#" class="back">Back</a>
+            <a id="saveItem" href="#" class="switchButton slideright" style="float:right">Save</a>
+        </div>
+    	<ul class="rounded" style="margin-top:20px;">
+        	
+            <li><label>分類名稱</label><input style="width:200px;text-align:center" type="text" name="itemName" id="itemName" /></li>
+            <li><label>自定排序</label><input style="width:200px;text-align:center" type="tel" name="itemSort" id="itemSort" /></li>
+            <input type="hidden" id="itemId" />
+            <li><a id="deleteItem" href="#" class="" style="text-align:center;">刪除此分類</a></li>
+            
+        </ul>
+    </div>
+    
+	<div id="welcome">
+    	<div class="toolbar">
+            <h1>歡迎使用</h1>
+        </div>
+        <div align="center" style="margin-top:20px;">
+        	歡迎使用MyMoney<br />請先輸入使用者名稱，以及建立一個帳戶
+        </div>
+        <ul class="rounded">
+            <li><input placeholder="使用者名稱" type="text" name="user" id="user" /></li>
+            <li><input placeholder="帳戶名稱" type="text" name="account" id="account" /></li>
+            <div>
+            	<li><a href="#" id="setGoogle">進階</a></li>
+            </div>
+            <div id="GooleForm" style="display:none">
+            	<li><input placeholder="Google帳號" type="text" name="gmail" id="gmail" /></li>
+            	<li><input placeholder="Google密碼" type="text" name="password" id="password" /></li>
+            </div>
+        </ul>
+        <div style="margin: 20px;">
+            <a id="goHomeCheck" href="#" class="whiteButton slideup">確認</a>
+        </div>
+    </div>
+    	
+    
+    <div  id="totalLink" style="display:none">
+    	<a id="goHome" href="#home" style="display:none">home</a>
+        <a id="goWelcome" href="#welcome" style="display:none">welcome</a>
+        <a id="goRecordItemSelPage" href="#itemSelPage_0" style="display:none" >itemsel</a>
+    </div>
+    
+
+	<div id="export">
+    	<div class="toolbar">
+        	<a id="epBack" class="switchButton" href="#">Back</a>
+            <div class="spBtnBox spOptBox">
+            	<img id="circle" src="circle.png" class="spBtn showType" />
+            </div>
+            <div class="spBtnBox spOptBox">
+            	<img id="y" src="spDateRangeY.png" class="spBtn dateType" />
+            	<img id="m" src="spDateRangeM.png" class="spBtn dateType" />
+                <img id="d" src="spDateRangeD.png" class="spBtn dateType" />
+            </div>
+            <div class="spBtnBox spCalBox">
+            	<div class="spCalSelYM">
+                	<span class="spCalLast" style="float:left">&lt;&lt;</span>
+                    <span class="spCalDate"></span>
+                    <span class="spCalNext" style="float:right">&gt;&gt;</span>
+                </div>
+                <div class="spCalSelD" style="visibility:hidden;">
+                </div>
+            </div>
+            <div class="toolbarSpBtn" style="float:right; position:relative; top:-10px; right:-20px;">
+            	<img src="circle.png" class="spBtn spShowBox" />
+                <img src="spDateRange.png" class="spBtn spShowBox" />
+                <img src="M.png" class="spBtn spShowBox" />
+                <img src="M.png" class="spBtn spShowBox" />
+            </div>
+        </div>
+        <img id="loading" src="css/themes/jqt/img/loading.gif" style=" position:absolute; left:150px; top:215px; display:none;" />
+        <div id="svgChart">
+        	<div id="svgChartInfo" style="background-color:#000; font-size:16px;">
+            	分類<br />範圍
+            </div>
+        </div>
+    </div>
+	
+
+
+
+
+
+
+
+
+
+</body>
+</html>

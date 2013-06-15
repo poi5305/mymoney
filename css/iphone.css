@@ -1,0 +1,280 @@
+body{
+	overflow:hidden;
+	min-height:460px;
+}
+body >div{
+	min-height:460px;
+	overflow-x:hidden;
+}
+
+/* start css */
+#home{
+	background:#FFF;
+}
+
+/* toolbar button */
+.switchButton{
+	-webkit-border-image: url(themes/jqt/img/button.png) 0 5 0 5;
+	height:30px;
+	display:inline-block;
+	text-align:center;
+	line-height:30px;
+	text-decoration: none;
+	position:relative;
+	top:-5px;
+	color:#FFF;
+}
+#newRecord{
+	font-size:20px;
+	width:30px;
+}
+
+/* CalTable */
+#calTable table{
+	border-collapse:collapse;
+	width:100%;
+	//height:360px;
+}
+#calTable td{
+	border:1px solid #999;
+	vertical-align:text-top;
+	font-size:10px;
+	width:45px;
+	
+}
+#calTable tr:first-child td{
+	height:12px;
+	color:#444;
+	text-align:center;
+}
+.calSundayInfo, #calTable tr:first-child td:first-child{
+	color:#F36;
+}
+.calSaturdayInfo, #calTable tr:first-child td:last-child{
+	color:#36F;
+}
+.calDayInfo{
+	color:#000;
+	height:10px;
+}
+.calDayRecord{
+	color:#666;
+	width:45px;
+	white-space:nowrap; 
+	text-overflow:ellipsis; 
+	-o-text-overflow:ellipsis; 
+	overflow: hidden;
+}
+
+/* detail */
+#calDayDetail{
+	position:absolute;
+	background:#fff;
+	border:1px #666 solid;
+	width:120px;
+	max-height:360px;
+	top:80px;
+	left:0px;
+	display:none;
+	font-size:12px;
+	color:#000;
+}
+.calDayDetailRecord{
+	height:28px;
+	//border:1px #333 solid;
+	//overflow:hidden;
+	overflow-x:scroll;
+	
+}
+.detail{
+	width:60px;
+	hieght:14px;
+	line-height:14px;
+	float:left;
+	white-space:nowrap; 
+	text-overflow:ellipsis; 
+	-o-text-overflow:ellipsis; 
+	overflow: hidden;
+}
+#detail_title{
+	width:118px;
+	background-color:#333;
+	color:#CCC;
+	border:1px #000 solid;
+	float:none;
+}
+#detail_account{
+	background-color:#D6FFFC;
+	text-align:right;
+}
+#detail_time{
+	
+	background-color:#D6FFFC;
+}
+#detail_item{
+	width:60px;
+}
+#detail_money{
+	width:34px;
+	text-align:right;
+}
+#detail_currency{
+	width:26px;
+	text-align:right;
+}
+#detail_totalF{
+	width:40px;
+}
+#detail_totalM{
+	width:54px;
+	text-align:right;
+}
+.P{color:#36F;}
+.N{color:#F36;}
+
+/* editor  */
+#editor label{
+	color:#CCC;
+}
+#editor ul li .recordQSelItem{
+	border-left:1px #CCC solid;
+}
+#editor ul li .recordQSelItem:first-child{
+	border:none;
+}
+#recordSelItem, .recordQSelItem{
+	display:inline-block;
+	width:85px;
+	color:#999;
+	padding-left:4px;
+	padding-right:4px;
+	overflow:hidden;
+}
+#editor ul .itemQSel{
+	width:1000px; 
+	position:relative;
+}
+
+/*itemSelPage*/
+
+.itemSelPage ul li{
+	height:27px;
+}
+/* more */
+.more{
+	background-image:url(../jqt/themes/jqt/img/chevron_circle.png);
+	height:26px;
+	width:26px;
+	float:right;
+	position:relative;
+	top:-23px;
+}
+.infoBlock{
+	width:260px;
+	line-height:24px;
+}
+.infoBlock div{
+	white-space:nowrap; 
+	text-overflow:ellipsis; 
+	-o-text-overflow:ellipsis; 
+	overflow: hidden;
+	width:130px;
+	float:left;
+	
+}
+.infoBlock .infoTitle{
+	font-size:20px;
+}
+.infoBlock .infoSubTitle{
+	font-size:16px;
+	color:#ccc;
+	
+}
+.infoBlock .infoMidText{
+	font-size:16px;
+	color:#aaa;
+}
+.infoBlock .infoMiniText{
+	font-size:14px;
+	color:#999;
+	width:65px;
+}
+.infoBlock .infoText{
+	font-size:14px;
+	width:250px;
+	color:#666;
+	line-height:16px;
+}
+
+/* export */
+
+/* spButton */
+.toolbarSpBtn{
+	background-color:#000;
+	border:2px solid #FFF ;
+	border-radius:10px;
+	border-right:none;
+	padding:2px;
+	padding-left:10px;
+	padding-right:15px;
+	height:35px;
+}
+.spBtn{
+	
+}
+.spBtnBox{
+	background-color:#000;
+	border:2px solid #FFF ;
+	border-radius:10px;
+	padding:5px;
+	padding-bottom:10px;
+	width:35px;
+	//line-height:39px;
+	position:absolute;
+	opacity: 0.9;
+	display:none;
+}
+.spBtnBox img{
+	margin-top:5px;
+	width:35px;
+	height:35px;
+}
+.spCalBox{
+	width:75%;
+	background:none;
+	border:none;
+}
+.toolbarSpBtn img{
+	width:35px;
+	height:35px;
+}
+.spCalBox div{
+	background-color:#000;
+	border:2px solid #FFF ;
+	border-radius:10px;
+	padding:2px;
+	margin-bottom:5px;
+	text-align:center;
+}
+.spCalSelYM{
+	font-size:24px;
+	line-height:30px;
+}
+.spCalSelD{
+	font-size:20px;
+	line-height:24px;
+}
+.spCalSelD table td div{
+	border:2px solid #CCC; ;
+}
+.spCalSelD table tr td:first-child{
+	color:#F33;
+}
+.spCalSelD table tr td:last-child{
+	color:#06F;
+}
+
+
+
+
+

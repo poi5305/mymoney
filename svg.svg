@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg" >
+<style type="text/css">
+#svg{
+	background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#333), to(#5e5e65));
+}
+.circle{
+	fill:#000;
+	stroke:#fff;
+	stroke-width:2;
+	fill-opacity:0.7;
+	strock-opacity:0.4;
+}
+.circle-touch{
+	fill:#f00;
+	stroke:#fff;
+	stroke-width:2;
+	fill-opacity:0.4;
+	strock-opacity:0.2;
+}
+.circle0{fill:#000;}
+.circle1{fill:#111;}
+.circle2{fill:#222;}
+.circle3{fill:#333;}
+.circle4{fill:#444;}
+.circle5{fill:#555;}
+.circle6{fill:#666;}
+.circle7{fill:#777;}
+.circle8{fill:#888;}
+.circle9{fill:#999;}
+.text{
+	text-anchor:middle;
+	font-family:Arial;
+	stroke:none;
+	stroke-width:0;
+	fill:#fff;
+}
+.text-other{
+	font-family:Arial;
+	stroke:none;
+	stroke-width:0;
+	fill:#fff;
+}
+</style>
+</svg>
